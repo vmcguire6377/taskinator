@@ -45,17 +45,12 @@ var createTaskEl = function(taskDataObj) {
   var listItemEl = document.createElement("li");
   listItemEl.className = "task-item";
   listItemEl.setAttribute("data-task-id", taskIdCounter);
-  console.log(taskDataObj);
-  console.log(taskDataObj.status);
 
   var taskInfoEl = document.createElement("div");
   taskInfoEl.className = "task-info";
   taskInfoEl.innerHTML =
     "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
   listItemEl.appendChild(taskInfoEl);
-  taskDataObj.id = taskIdCounter;
-  tasks.push(taskDataObj);
-  localStorage.setItem("tasks", tasks);
 
   var taskActionsEl = createTaskActions(taskIdCounter);
   listItemEl.appendChild(taskActionsEl);
@@ -144,7 +139,6 @@ var completeEditTask = function (taskName, taskType, taskId) {
       tasks[i].name = taskName;
       tasks[i].type = taskType;
     }
-    localStorage.setItem("tasks", tasks);
   }
 
   alert("Task Updated!");
@@ -199,15 +193,9 @@ var taskStatusChangeHandler = function (event) {
       tasks[i].status = statusValue;
     }
   }
-// update task's in tasks array
-for (var i = 0; i < tasks.length; i++) {
-  if (tasks[i].id === parseInt(taskId)) {
-    tasks[i].status = statusValue;
-  }
-}
+
   // save to localStorage
   saveTasks();
-  localStorage.setItem("tasks", tasks);
 };
 
 var editTask = function (taskId) {
@@ -252,20 +240,6 @@ var deleteTask = function (taskId) {
     if (tasks[i].id !== parseInt(taskId)) {
       updatedTaskArr.push(tasks[i]);
     }
-    // create new array to hold updated list of tasks
-var updatedTaskArr = [];
-
-// loop through current tasks
-for (var i = 0; i < tasks.length; i++) {
-  // if tasks[i].id doesn't match the value of taskId, let's keep that task and push it into the new array
-  if (tasks[i].id !== parseInt(taskId)) {
-    updatedTaskArr.push(tasks[i]);
-    localStorage.setItem("tasks", tasks);
-  }
-}
-
-// reassign tasks array to be the same as updatedTaskArr
-tasks = updatedTaskArr;
   }
 
   // reassign tasks array to be the same as updatedTaskArr
@@ -275,7 +249,6 @@ tasks = updatedTaskArr;
 
 var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
-
 };
 
 var loadTasks = function() {
@@ -296,10 +269,7 @@ var loadTasks = function() {
     createTaskEl(savedTasks[i]);
   }
 };
-var saveTasks = function() {
-  localStorage.setItem("tasks", tasks);
 
-}
 // Create a new task
 formEl.addEventListener("submit", taskFormHandler);
 
